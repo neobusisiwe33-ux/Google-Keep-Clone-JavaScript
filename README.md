@@ -15,4 +15,5 @@ JavaScript
 
 Project Demo:
 https://neobusisiwe33-ux.github.io/Google-Keep-Clone-JavaScript/
-google-keep-clone-javascript.netlify.app
+
+https://google-keep-clone-javascript.netlify.app/
