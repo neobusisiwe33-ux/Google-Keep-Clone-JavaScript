@@ -11,4 +11,8 @@ Interactive
 Code Used
 HTML5
 CSS3
-JavaScript (ES6)
+JavaScript 
+
+Project Demo:
+https://neobusisiwe33-ux.github.io/Google-Keep-Clone-JavaScript/
+google-keep-clone-javascript.netlify.app
