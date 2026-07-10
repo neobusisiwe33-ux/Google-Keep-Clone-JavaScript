@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Keep Clone</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <button class="menu-toggle" id="menu-toggle">
+            <span class="material-icons">menu</span>
+        </button>
+        <div class="logo">
+            <img src="logo.png" alt="Keep" class="keep-logo">
+            <span>Keep</span>
+        </div>
+    </div>
+    <nav class="sidebar-nav">
+        <button class="sidebar-nav-item active" data-view="notes">
+            <span class="material-icons">lightbulb</span>
+            <span>Notes</span>
+        </button>
+        <button class="sidebar-nav-item" data-view="reminders">
+            <span class="material-icons">notifications</span>
+            <span>Reminders</span>
+        </button>
+        <button class="sidebar-nav-item" data-view="archive">
+            <span class="material-icons">archive</span>
+            <span>Archive</span>
+        </button>
+        <button class="sidebar-nav-item" data-view="trash">
+            <span class="material-icons">delete</span>
+            <span>Trash</span>
+        </button>
+    </nav>
+    <div class="sidebar-labels">
+        <div class="labels-header">
+            <span class="material-icons">label</span>
+            <span>Labels</span>
+        </div>
+        <div id="labels-list" class="labels-list">
+        </div>
+        <button class="add-label-btn" id="add-label-btn">
+            <span class="material-icons">add</span>
+            <span>Create new label</span>
+        </button>
+    </div>
+</aside>
+
+<!-- Main Content -->
+<main class="main-content">
+
+    <!-- Header -->
+    <header class="header">
+        <div class="search-container">
+            <span class="material-icons search-icon">
+                search</span>
+            <input
+                    type="text"
+                    id="search-input"
+                    class="search-input"
+                    placeholder="Search"
+            >
+        </div>
+        <div class="header-actions">
+            <button class="header-action-btn" data-tooltip="Refresh">
+                <span class="material-icons">refresh</span>
+            </button>
+            <button class="header-action-btn" data-tooltip="View toggle">
+                <span class="material-icons">view_agenda</span>
+            </button>
+            <button class="header-action-btn" data-tooltip="Settings">
+                <span class="material-icons">settings</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Note Creation Section -->
+    <section class="note-creation">
+        <div class="note-input-container" id="note-input-container">
+            <div class="note-input-collapsed">
+                <input
+                        type="text"
+                        id="note-title"
+                        class="note-title-input"
+                        placeholder="Title"
+                >
+                <textarea
+                        id="note-content"
+                        class="note-content-input"
+                        placeholder="Take a note..."
+                        rows="1"
+                ></textarea>
+            </div>
+            <div class="note-actions note-actions-hidden">
+                <button class="note-action-btn" data-action="checklist" data-tooltip="Checklist">
+                    <span class="material-icons">checklist</span>
+                </button>
+                <button class="note-action-btn" data-action="image" data-tooltip="Add image">
+                    <span class="material-icons">image</span>
+                </button>
+                <button class="note-action-btn color-picker-btn" data-action="color" data-tooltip="Background options">
+                    <span class="material-icons">palette</span>
+                </button>
+                <button class="note-action-btn" data-action="archive" data-tooltip="Archive">
+                    <span class="material-icons">archive</span>
+                </button>
+                <button class="note-action-btn" data-action="more" data-tooltip="More">
+                    <span class="material-icons">more_vert</span>
+                </button>
+                <button
+                        id="add-note-btn"
+                        class="btn btn-primary"
+                        data-tooltip="Create a new note"
+                >
+                    Close
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Notes Display Section -->
+    <section class="notes-section">
+        <div class="section-header" id="section-header">
+            <h2 id="section-title">Notes</h2>
+        </div>
+        <div id="pinned-notes-container" class="notes-container pinned-section hidden">
+            <div class="section-label">PINNED</div>
+            <!-- Pinned notes will be dynamically inserted here -->
+        </div>
+        <div id="notes-container" class="notes-container">
+            <!-- Notes will be dynamically inserted here -->
+        </div>
+        <div id="empty-state" class="empty-state">
+            <span class="material-icons empty-icon">lightbulb</span>
+            <p id="empty-message">Notes you add appear here</p>
+        </div>
+    </section>
+</main>
+
+<!-- Modal for Note Editing -->
+<div id="edit-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="modal-actions">
+                <button class="modal-action-btn" data-action="pin" data-tooltip="Pin note">
+                    <span class="material-icons">push_pin</span>
+                </button>
+                <button class="modal-action-btn" data-action="archive" data-tooltip="Archive">
+                    <span class="material-icons">archive</span>
+                </button>
+                <button class="modal-action-btn" data-action="delete" data-tooltip="Delete">
+                    <span class="material-icons">delete</span>
+                </button>
+            </div>
+            <button class="modal-close">
+                <span class="material-icons">close</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <input
+                    type="text"
+                    id="edit-note-title"
+                    class="edit-note-title"
+                    placeholder="Title"
+            >
+            <textarea
+                    id="edit-note-content"
+                    class="edit-note-content"
+                    placeholder="Note content..."
+                    rows="6"
+            ></textarea>
+            <div class="modal-note-actions">
+                <button class="modal-action-btn" data-action="checklist" data-tooltip="Checklist">
+                    <span class="material-icons">checklist</span>
+                </button>
+                <button class="modal-action-btn" data-action="image" data-tooltip="Add image">
+                    <span class="material-icons">image</span>
+                </button>
+                <button class="modal-action-btn color-picker-btn" data-action="color" data-tooltip="Background options">
+                    <span class="material-icons">palette</span>
+                </button>
+                <button class="modal-action-btn" data-action="label" data-tooltip="Add label">
+                    <span class="material-icons">label</span>
+                </button>
+                <button class="modal-action-btn" data-action="more" data-tooltip="More">
+                    <span class="material-icons">more_vert</span>
+                </button>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <span class="modal-date" id="modal-date"></span>
+        </div>
+    </div>
+</div>
+
+<!-- Color Picker Modal -->
+<div id="color-modal" class="modal color-modal">
+    <div class="color-modal-content">
+        <div class="color-modal-header">
+            <span>Color</span>
+            <button class="color-modal-close">
+                <span class="material-icons">close</span>
+            </button>
+        </div>
+        <div class="color-palette">
+            <button class="color-option" data-color="default" data-tooltip="Default">
+                <div class="color-swatch default"></div>
+            </button>
+            <button class="color-option" data-color="white" data-tooltip="White">
+                <div class="color-swatch white"></div>
+            </button>
+            <button class="color-option" data-color="red" data-tooltip="Red">
+                <div class="color-swatch red"></div>
+            </button>
+            <button class="color-option" data-color="orange" data-tooltip="Orange">
+                <div class="color-swatch orange"></div>
+            </button>
+            <button class="color-option" data-color="yellow" data-tooltip="Yellow">
+                <div class="color-swatch yellow"></div>
+            </button>
+            <button class="color-option" data-color="green" data-tooltip="Green">
+                <div class="color-swatch green"></div>
+            </button>
+            <button class="color-option" data-color="teal" data-tooltip="Teal">
+                <div class="color-swatch teal"></div>
+            </button>
+            <button class="color-option" data-color="blue" data-tooltip="Blue">
+                <div class="color-swatch blue"></div>
+            </button>
+            <button class="color-option" data-color="dark-blue" data-tooltip="Dark blue">
+                <div class="color-swatch dark-blue"></div>
+            </button>
+            <button class="color-option" data-color="purple" data-tooltip="Purple">
+                <div class="color-swatch purple"></div>
+            </button>
+            <button class="color-option" data-color="pink" data-tooltip="Pink">
+                <div class="color-swatch pink"></div>
+            </button>
+            <button class="color-option" data-color="brown" data-tooltip="Brown">
+                <div class="color-swatch brown"></div>
+            </button>
+            <button class="color-option" data-color="gray" data-tooltip="Gray">
+                <div class="color-swatch gray"></div>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Label Modal -->
+<div id="label-modal" class="modal">
+    <div class="modal-content label-modal-content">
+        <div class="modal-header">
+            <span>Labels</span>
+            <button class="modal-close label-modal-close">
+                <span class="material-icons">close</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="label-input-container">
+                <input
+                        type="text"
+                        id="new-label-input"
+                        class="new-label-input"
+                        placeholder="Create new label"
+                >
+                <button id="create-label-btn" class="btn btn-primary">Create</button>
+            </div>
+            <div id="label-checkboxes" class="label-checkboxes">
+                <!-- Label checkboxes will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Notification -->
+<div id="toast" class="toast">
+    <span id="toast-message"></span>
+    <button class="toast-undo" id="toast-undo">Undo</button>
+</div>
+
+<!-- Scripts -->
+<script src="script.js"></script>
+</body>
+</html>
+
